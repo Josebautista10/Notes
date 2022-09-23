@@ -2,6 +2,7 @@ import express from 'express'
 import {
   deleteUser,
   getUser,
+  getUserNotes,
   getUsers,
   updateUser
 } from '../controllers/userController.js'
@@ -31,5 +32,7 @@ router.get('/:id', verifyUser, getUser)
 
 // GET ALL
 router.get('/', verifyAdmin, getUsers)
+
+router.get('/:id/notes', verifyUser, getUserNotes)
 
 export default router
