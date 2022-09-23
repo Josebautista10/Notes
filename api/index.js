@@ -1,10 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
-// import authRoute from './routes/auth.js'
-// import usersRoute from './routes/users.js'
-// import barbersRoute from './routes/barbers.js'
-// import appointmentsRoute from './routes/appointments.js'
+import authRoute from './routes/auth.js'
+import usersRoute from './routes/users.js'
 import cookieParser from 'cookie-parser'
 
 const app = express()
@@ -31,22 +29,19 @@ mongoose.connection.on('connected', () => {
 app.use(cookieParser())
 app.use(express.json())
 
-// app.use('/api/auth', authRoute)
-// app.use('/api/users', usersRoute)
-// app.use('/api/barbers', barbersRoute)
-// app.use('/api/appointments', appointmentsRoute)
+app.use('/api/auth', authRoute)
+app.use('/api/users', usersRoute)
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500
-  const errorMessage = err.message || "Something went wrong!"
+  const errorMessage = err.message || 'Something went wrong!'
   return res.status(500).json({
-    success: false, 
+    success: false,
     status: errorStatus,
     message: errorMessage,
     stack: err.stack
   })
 })
-
 
 app.listen(8000, () => {
   connect()
