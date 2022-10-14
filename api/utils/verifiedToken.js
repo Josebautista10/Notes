@@ -16,9 +16,10 @@ export const verifiedToken = (req, res, next) => {
 }
 
 export const verifyUser = (req, res, next) => {
+  console.log(req.params)
   verifiedToken(req, res, () => {
-    console.log(req.params.id, req.user.id)
-    if (req.user.id === req.params.id || req.user.isAdmin) {
+
+    if (req.user.id === req.params.userid || req.user.isAdmin) {
       next()
     } else {
       return next(createError(401, 'You are not authorized!'))
@@ -27,7 +28,6 @@ export const verifyUser = (req, res, next) => {
 }
 
 export const verifyAdmin = (req, res, next) => {
-  console.log(req.user);
   verifiedToken(req, res, () => {
     if (req.user.isAdmin) {
       next()

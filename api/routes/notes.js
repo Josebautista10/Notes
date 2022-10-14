@@ -13,15 +13,15 @@ const router = express.Router()
 router.post('/:userid', verifyUser, createNote)
 
 // UPDATE
-router.put('/:id', verifyUser, updateNote)
+router.put('/:userid/:id', verifyUser, updateNote)
 
 // DELETE
-router.delete('/:id', verifyUser, deleteNote)
+router.delete('/:userid/:id', verifyUser, deleteNote)
 
 // GET
-router.get('/:id', verifyUser, getNote)
+router.get('/:userid/:id', verifyUser, getNote)
 
 // GET ALL
-router.get('/', verifyUser, getNotes)
+router.get('/', verifyAdmin, getNotes)
 
 export default router

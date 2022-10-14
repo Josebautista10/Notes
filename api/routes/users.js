@@ -22,17 +22,17 @@ const router = express.Router()
 // })
 
 // UPDATE
-router.put('/:id', verifyUser, updateUser)
+router.put('/:userid', verifyUser, updateUser)
 
 // DELETE
-router.delete('/:id', verifyUser, deleteUser)
+router.delete('/:userid', verifyUser, deleteUser)
 
 // GET
-router.get('/:id', verifyUser, getUser)
+router.get('/:userid', verifyUser, getUser)
 
 // GET ALL
 router.get('/', verifyAdmin, getUsers)
 
-router.get('/:id/notes', verifyUser, getUserNotes)
+router.get('/:userid/notes', verifyUser, getUserNotes)
 
 export default router

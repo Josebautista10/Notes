@@ -3,15 +3,13 @@ import User from '../models/User.js'
 
 export const createNote = async (req, res, next) => {
   const userId = req.params.userid
-  const newNote = new Note(req.body)
+
+  const noteInfo = { ...req.body, userId }
+  console.log(noteInfo)
+  const newNote = new Note(noteInfo)
 
   try {
     const savedNote = await newNote.save()
-    try {
-      await User.findByIdAndUpdate(userId, { $push: { notes: savedNote._id } })
-    } catch (error) {
-      next(error)
-    }
     res.json(savedNote)
   } catch (error) {
     next(error)
@@ -19,6 +17,7 @@ export const createNote = async (req, res, next) => {
 }
 
 export const updateNote = async (req, res, next) => {
+
   try {
     const updateNote = await Note.findByIdAndUpdate(
       req.params.id,
@@ -30,7 +29,13 @@ export const updateNote = async (req, res, next) => {
     next(error)
   }
 }
+
 export const deleteNote = async (req, res, next) => {
+  const note = await Note.findById(req.params.id)
+  const userNoteId = note.userId
+  if (!req.params.userid === userNoteId)
+    return next(createError(401, 'You are not authorized!'))
+
   try {
     const deletedNote = await Note.findByIdAndDelete(req.params.id, {
       $set: req.body
@@ -40,9 +45,13 @@ export const deleteNote = async (req, res, next) => {
     next(error)
   }
 }
+
 export const getNote = async (req, res, next) => {
+  const note = await Note.findById(req.params.id)
+  const userNoteId = note.userId
+  if (!req.params.userid === userNoteId)
+    return next(createError(401, 'You are not authorized!'))
   try {
-    const note = await Note.findById(req.params.id)
     res.json(note)
   } catch (error) {
     next(error)
@@ -50,7 +59,6 @@ export const getNote = async (req, res, next) => {
 }
 export const getNotes = async (req, res, next) => {
   try {
-    const notes = await Note.find(req.params.id)
     res.json(notes)
   } catch (error) {
     next(error)
