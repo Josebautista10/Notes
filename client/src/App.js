@@ -1,7 +1,11 @@
+import  Login  from '../src/components/Login'
+import  Register  from '../src/components/Register'
+
 function App() {
   return (
     <div className='bg-red-800'>
-      <h1>welcome to my page </h1>
+      {/* <Login/> */}
+      <Register/>
     </div>
   )
 }
