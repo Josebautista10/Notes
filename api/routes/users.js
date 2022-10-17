@@ -1,12 +1,12 @@
 import express from 'express'
 import {
+  getUserNotes,
+  updateUser,
   deleteUser,
   getUser,
-  getUserNotes,
   getUsers,
-  updateUser
 } from '../controllers/userController.js'
-import { verifiedToken, verifyAdmin, verifyUser } from '../utils/verifiedToken.js'
+import { verifyAdmin, verifyToken, verifyUser } from "../utils/verifyToken.js";
 const router = express.Router()
 
 // router.get('/checkauthentication', verifiedToken, (req, res, next) => {
@@ -33,6 +33,6 @@ router.get('/:userid', verifyUser, getUser)
 // GET ALL
 router.get('/', verifyAdmin, getUsers)
 
-router.get('/:userid/notes', verifyUser, getUserNotes)
+// router.get('/:userid/notes', verifyUser, getUserNotes)
 
 export default router

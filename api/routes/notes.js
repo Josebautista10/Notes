@@ -6,7 +6,7 @@ import {
   getNotes,
   updateNote
 } from '../controllers/noteController.js'
-import { verifyAdmin, verifyUser } from '../utils/verifiedToken.js'
+import { verifyAdmin, verifyUser } from '../utils/verifyToken.js'
 const router = express.Router()
 
 // CREATE
@@ -22,6 +22,6 @@ router.delete('/:userid/:id', verifyUser, deleteNote)
 router.get('/:userid/:id', verifyUser, getNote)
 
 // GET ALL
-router.get('/', verifyAdmin, getNotes)
+// router.get('/', verifyAdmin, getNotes)
 
 export default router
