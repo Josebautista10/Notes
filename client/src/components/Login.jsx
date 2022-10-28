@@ -1,6 +1,35 @@
+import { useContext, useState } from 'react'
 import { CgNotes } from 'react-icons/cg'
+import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
+import axios from 'axios'
 
 const Login = () => {
+  const [credentials, setCredentials] = useState({
+    username: undefined,
+    password: undefined
+  })
+
+  const { loading, error, dispatch } = useContext(AuthContext)
+
+  const navigate = useNavigate()
+
+  const handleChange = (e) => {
+    setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }))
+  }
+
+  const handleClick = async (e) => {
+    e.preventDefault()
+    dispatch({ type: 'LOGIN_START' })
+    try {
+      const res = await axios.post('/auth/login', credentials)
+      dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.details })
+      navigate('/')
+    } catch (err) {
+      dispatch({ type: 'LOGIN_FAILURE', payload: err.response.data })
+    }
+  }
+
   return (
     <div className='flex h-screen'>
       <div className='bg-burnt-orange w-1/2'>
@@ -19,13 +48,15 @@ const Login = () => {
           <h1 className='text-burnt-orange text-3xl'>Welcome Back!</h1>
           <p className='text-xl flex '>
             Don't have an account yet?&nbsp;
-            <a className='text-burnt-orange' href='/register'>Register Here!</a>
+            <a className='text-burnt-orange' href='/register'>
+              Register Here!
+            </a>
           </p>
           <form className=' mt-10'>
             <div className='flex flex-col text-burnt-orange text-2xl'>
-              <label>Email:</label>
+              <label>Username:</label>
               <input
-                type='email'
+                type='text'
                 className='
                 form-control
                 block
@@ -42,7 +73,9 @@ const Login = () => {
                 ease-in-out
                 mb-8
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
-                placeholder='example@example.com'
+                id='username'
+                onChange={handleChange}
+                placeholder='user3000'
                 required
               />
             </div>
@@ -67,11 +100,20 @@ const Login = () => {
                 m-0
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
                 placeholder='Password'
+                id='password'
+                onChange={handleChange}
                 required
               />
             </div>
           </form>
-          <button className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12'>Login</button>
+          <button
+            className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12'
+            disabled={loading}
+            onClick={handleClick}
+          >
+            Login
+          </button>
+          {error && <span>{error.message}</span>}
         </div>
       </div>
     </div>
