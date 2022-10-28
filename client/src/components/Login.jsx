@@ -19,7 +19,7 @@ const Login = () => {
           <h1 className='text-burnt-orange text-3xl'>Welcome Back!</h1>
           <p className='text-xl flex '>
             Don't have an account yet?&nbsp;
-            <p className='text-burnt-orange'>Register Here!</p>
+            <a className='text-burnt-orange' href='/register'>Register Here!</a>
           </p>
           <form className=' mt-10'>
             <div className='flex flex-col text-burnt-orange text-2xl'>

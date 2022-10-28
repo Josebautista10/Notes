@@ -19,7 +19,7 @@ const Register = () => {
           <h1 className='text-burnt-orange text-3xl'>Welcome to Notes! </h1>
           <p className='text-xl flex '>
             Already have an account?&nbsp;
-            <p className='text-burnt-orange'>Login!</p>
+            <a className='text-burnt-orange' href='/login'>Login!</a>
           </p>
           <form className=' mt-10'>
             <div className='flex flex-col text-burnt-orange text-2xl'>
