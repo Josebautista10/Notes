@@ -58,6 +58,7 @@ export const getNote = async (req, res, next) => {
   }
 }
 export const getNotes = async (req, res, next) => {
+  const notes = await Note.find({userId: req.params.userid})
   try {
     res.json(notes)
   } catch (error) {

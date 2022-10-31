@@ -2,11 +2,11 @@ import axios from 'axios'
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
+import useFetch from '../hooks/useFetch'
 
 const Home = () => {
   const { dispatch, user } = useContext(AuthContext)
   const [counter, setCounter] = useState(5)
-  console.log(counter)
   const navigate = useNavigate()
 
   const handleClick = async (e) => {
@@ -22,6 +22,22 @@ const Home = () => {
       }
     }, 1000)
   }
+    const {data, loading, error} = useFetch(`/notes/${user._id}`)
+
+const getDate = (date) => {
+  const time = new Date(date)
+  const finalDate = new Date(time)
+  return `${finalDate}`
+}
+getDate("2022-10-31T20:11:20.070Z")
+console.log(Array.isArray(data.data));
+const notes = data.data?.map(note => {
+  return <li key={note._id}>
+      <p>{getDate(note.createdAt)}</p>
+      <p>{note.description}</p>
+    </li>
+  })
+  console.log(data, notes);
 
   return user ? (
     <div>
@@ -36,6 +52,11 @@ const Home = () => {
         <div>
           <button className=''>New Note</button>
         </div>
+      </div>
+      <div>
+        <ul>
+          {notes}
+        </ul>
       </div>
     </div>
   ) : (

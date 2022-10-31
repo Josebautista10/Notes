@@ -22,6 +22,6 @@ router.delete('/:userid/:id', verifyUser, deleteNote)
 router.get('/:userid/:id', verifyUser, getNote)
 
 // GET ALL
-// router.get('/', verifyAdmin, getNotes)
+router.get('/:userid', verifyUser, getNotes)
 
 export default router

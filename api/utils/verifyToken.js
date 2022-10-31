@@ -8,10 +8,8 @@ export const verifyToken = (req, res, next) => {
   }
 
   jwt.verify(token, process.env.JWT, (err, user) => {
-    console.log('user', user)
     if (err) return next(createError(403, 'Token is not valid!'))
     req.user = user
-    console.log('req.user', req.user)
     next()
   })
 }
