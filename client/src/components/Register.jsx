@@ -1,6 +1,38 @@
+import axios from 'axios'
+import { useContext, useState } from 'react'
 import { CgNotes } from 'react-icons/cg'
+import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
+
 
 const Register = () => {
+
+  const [credentials, setCredentials] = useState({
+    username: undefined,
+    email: undefined,
+    password: undefined
+  })
+  const { loading, error, dispatch } = useContext(AuthContext)
+
+  const navigate = useNavigate()
+
+  const handleChange = (e) => {
+    console.log(e.target.id, e.target.value)
+    setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }))
+  }
+
+  const handleClick = async (e) => {
+    e.preventDefault()
+    try {
+      const res = await axios.post('/auth/register', credentials)
+      console.log(res.data.details);
+      navigate('/login')
+    } catch (err) {
+      console.log(err.response.data);
+    }
+    console.log(credentials);
+  }
+
   return (
     <div className='flex h-screen'>
       <div className='bg-burnt-orange w-1/2'>
@@ -19,13 +51,16 @@ const Register = () => {
           <h1 className='text-burnt-orange text-3xl'>Welcome to Notes! </h1>
           <p className='text-xl flex '>
             Already have an account?&nbsp;
-            <a className='text-burnt-orange' href='/login'>Login!</a>
+            <a className='text-burnt-orange' href='/login'>
+              Login!
+            </a>
           </p>
           <form className=' mt-10'>
             <div className='flex flex-col text-burnt-orange text-2xl'>
               <label>Username:</label>
               <input
                 type='text'
+                id='username'
                 className='
                 form-control
                 block
@@ -43,6 +78,7 @@ const Register = () => {
                 mb-8
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
                 placeholder='User300'
+                onChange={handleChange}
                 required
               />
             </div>
@@ -50,6 +86,7 @@ const Register = () => {
               <label>Email:</label>
               <input
                 type='email'
+                id='email'
                 className='
                 form-control
                 block
@@ -67,6 +104,7 @@ const Register = () => {
                 mb-8
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
                 placeholder='example@example.com'
+                onChange={handleChange}
                 required
               />
             </div>
@@ -74,6 +112,7 @@ const Register = () => {
               <label>Password:</label>
               <input
                 type='password'
+                id='password'
                 className='
                 form-control
                 block
@@ -91,11 +130,15 @@ const Register = () => {
                 m-0
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
                 placeholder='Password'
+                onChange={handleChange}
                 required
               />
             </div>
           </form>
-          <button className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12'>Register</button>
+          <button className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12' disabled={loading}
+            onClick={handleClick}>
+            Register
+          </button>
         </div>
       </div>
     </div>

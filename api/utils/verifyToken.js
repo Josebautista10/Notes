@@ -8,16 +8,17 @@ export const verifyToken = (req, res, next) => {
   }
 
   jwt.verify(token, process.env.JWT, (err, user) => {
+    console.log('user', user)
     if (err) return next(createError(403, 'Token is not valid!'))
     req.user = user
+    console.log('req.user', req.user)
     next()
   })
 }
 
 export const verifyUser = (req, res, next) => {
-  // removed next() below
-    verifyToken(req, res, () => {
-      if (req.user.id === req.params.id || req.user.isAdmin) {
+  verifyToken(req, res, () => {
+      if (req.user.id === req.params.userid || req.user.isAdmin) {
         next();
       } else {
         return next(createError(403, "You are not authorized"));
