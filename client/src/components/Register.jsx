@@ -25,10 +25,11 @@ const Register = () => {
     e.preventDefault()
     try {
       const res = await axios.post('/auth/register', credentials)
-      console.log(res.data.details);
       navigate('/login')
     } catch (err) {
-      console.log(err.response.data);
+      console.log(err.response.data.message);
+      dispatch({ type: 'REGISTER_FAILURE', payload: err.response.data })
+      console.log(error);
     }
     console.log(credentials);
   }
@@ -139,6 +140,7 @@ const Register = () => {
             onClick={handleClick}>
             Register
           </button>
+          {error && <span>{error.message}</span>}
         </div>
       </div>
     </div>

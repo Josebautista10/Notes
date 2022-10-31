@@ -5,6 +5,11 @@ import jwt from 'jsonwebtoken'
 
 export const register = async (req, res, next) => {
   try {
+    const existingUserEmail = await User.findOne({ email: req.body.email })
+    const existingUserName = await User.findOne({ username: req.body.username })
+    if (existingUserEmail) return next(createError(404, 'Account with that email already exists!'))
+    if (existingUserName) return next(createError(404, 'User already exists!'))
+    console.log(req.body)
     const salt = bcrypt.genSaltSync(10)
     const hash = bcrypt.hashSync(req.body.password, salt)
 
