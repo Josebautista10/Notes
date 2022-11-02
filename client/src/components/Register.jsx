@@ -52,7 +52,7 @@ const Register = () => {
           <h1 className='text-burnt-orange text-3xl'>Welcome to Notes! </h1>
           <p className='text-xl flex '>
             Already have an account?&nbsp;
-            <a className='text-burnt-orange' href='/login'>
+            <a className='text-burnt-orange' href='/'>
               Login!
             </a>
           </p>
