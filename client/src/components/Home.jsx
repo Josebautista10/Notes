@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom'
 import Modal from 'react-modal'
 import { AuthContext } from '../context/AuthContext'
 import useFetch from '../hooks/useFetch'
+import getDate from '../utils/getDate'
+import NewNote from './NewNote'
 
 const customStyles = {
   content: {
@@ -27,7 +29,7 @@ const Home = () => {
   const navigate = useNavigate()
   const [modalIsOpen, setIsOpen] = useState(false)
 
-  const { data, loading, error } = useFetch(user ? `/notes/${user._id}` : '')
+  const { data, loading, error, reFetch } = useFetch(user ? `/notes/${user._id}` : '')
 
   if (!user) {
     return <Navigate to='/' replace />
@@ -53,13 +55,6 @@ const Home = () => {
     axios.get('/auth/logout').then(navigate('/'))
   }
 
-  const getDate = (date) => {
-    const time = new Date(date)
-    const finalDate = new Date(time)
-    return `${finalDate}`
-  }
-
-  console.log(Array.isArray(data.data))
   const notes = data.data?.map((note) => {
     return (
       <li key={note._id}>
@@ -88,37 +83,14 @@ const Home = () => {
       <div>
         <ul>{notes}</ul>
       </div>
-      <button>Open Modal</button>
       <Modal
         isOpen={modalIsOpen}
-        // onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel='Example Modal'
         appElement={document.getElementById('app')}
       >
-        <div className='flex flex-col w-8/10'>
-          <header className=''>Tell me what's on your mind</header>
-          <input
-            type='text'
-            className='px-3
-                py-1.5
-                text-base
-                font-normal
-                text-gray-700
-                bg-white bg-clip-padding
-                border border-solid border-gray-300
-                rounded
-                transition
-                ease-in-out
-                mb-8
-                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                '
-          />
-
-          <button onClick={closeModal}>close</button>
-          <form></form>
-        </div>
+        <NewNote closeModal={closeModal} id={user._id} reFetch={reFetch}/>
       </Modal>
     </div>
   )

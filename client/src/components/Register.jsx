@@ -31,7 +31,6 @@ const Register = () => {
       dispatch({ type: 'REGISTER_FAILURE', payload: err.response.data })
       console.log(error);
     }
-    console.log(credentials);
   }
 
   return (
