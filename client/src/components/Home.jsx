@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useContext, useEffect } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import Modal from 'react-modal'
 import { AuthContext } from '../context/AuthContext'
@@ -24,11 +24,16 @@ const customStyles = {
 
 const Home = () => {
   const { dispatch, user } = useContext(AuthContext)
-  const [counter, setCounter] = useState(5)
   const navigate = useNavigate()
+  const [modalIsOpen, setIsOpen] = useState(false)
+
+  const { data, loading, error } = useFetch(user ? `/notes/${user._id}` : '')
+
+  if (!user) {
+    return <Navigate to='/' replace />
+  }
 
   // let subtitle;
-  const [modalIsOpen, setIsOpen] = useState(false)
 
   function openModal() {
     setIsOpen(true)
@@ -48,34 +53,23 @@ const Home = () => {
     axios.get('/auth/logout').then(navigate('/'))
   }
 
-  if (!user) {
-    setInterval(() => {
-      setCounter(counter - 1)
-      if (counter === 0) {
-        document.getElementById('login').click()
-      }
-    }, 1000)
-  }
-  // const { data, loading, error } = useFetch(`/notes/${user._id}`)
-
   const getDate = (date) => {
     const time = new Date(date)
     const finalDate = new Date(time)
     return `${finalDate}`
   }
 
-  // console.log(Array.isArray(data.data))
-  // const notes = data.data?.map((note) => {
-  //   return (
-  //     <li key={note._id}>
-  //       <p>{getDate(note.createdAt)}</p>
-  //       <p>{note.description}</p>
-  //     </li>
-  //   )
-  // })
+  console.log(Array.isArray(data.data))
+  const notes = data.data?.map((note) => {
+    return (
+      <li key={note._id}>
+        <p>{getDate(note.createdAt)}</p>
+        <p>{note.description}</p>
+      </li>
+    )
+  })
 
-
-  return user ? (
+  return (
     <div>
       <nav className='bg-burnt-orange flex justify-between text-peach'>
         <div className='ml-4 text-4xl py-1'>Note</div>
@@ -92,7 +86,7 @@ const Home = () => {
         </div>
       </div>
       <div>
-        {/* <ul>{notes}</ul> */}
+        <ul>{notes}</ul>
       </div>
       <button>Open Modal</button>
       <Modal
@@ -126,21 +120,6 @@ const Home = () => {
           <form></form>
         </div>
       </Modal>
-    </div>
-  ) : (
-    <div className='bg-peach h-screen flex items-center justify-center  flex-col'>
-      <p className='text-3xl'>
-        Looks like your not signed in!&nbsp;
-        <a className='text-burnt-orange' href='/' id='login'>
-          {' '}
-          Login
-        </a>
-      </p>
-      <p className='text-xl'>
-        {counter < 0
-          ? 'redirecting'
-          : `You'll be redirected back to login page in ${counter} seconds`}
-      </p>
     </div>
   )
 }
