@@ -2,9 +2,9 @@ import axios from 'axios'
 import { useState } from 'react'
 import { GiCancel } from 'react-icons/gi'
 
-const NewNote = ({ closeModal, id, reFetch}) => {
+const NewNote = ({ closeModal, id, reFetch }) => {
   const [credentials, setCredentials] = useState({
-    description: undefined
+    description: ''
   })
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }))
@@ -16,14 +16,16 @@ const NewNote = ({ closeModal, id, reFetch}) => {
       await axios.post(`/notes/${id}`, credentials)
       reFetch()
       closeModal()
-      // dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.details })
     } catch (err) {
-      console.log(err);
-      // dispatch({ type: 'LOGIN_FAILURE', payload: err.response.data })
+      console.log(err)
     }
   }
 
+    let count = credentials.description.length
+    let maxCharCount = 80
+    let minCharCount = 10
 
+  
   return (
     <div className='flex flex-col w-8/10'>
       <div className='flex w-full justify-between mb-5'>
@@ -32,13 +34,15 @@ const NewNote = ({ closeModal, id, reFetch}) => {
           <GiCancel className='text-2xl text-black hover:text-red-400 transition duration-300' />
         </button>
       </div>
-      <form >
+      <form>
         <textarea
           type='text'
           cols='10'
           rows='3'
+          min='10'
           id='description'
           onChange={handleChange}
+          required
           className='px-3
                 py-4
                 text-base
@@ -53,8 +57,9 @@ const NewNote = ({ closeModal, id, reFetch}) => {
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
                 w-full
                 '
-        ></textarea>
-        <button onClick={handleClick}>save</button>
+        >Today I had an amazing day at the park</textarea>
+        <p>{maxCharCount - count}</p>
+        <button onClick={handleClick} disabled={count < minCharCount }>save</button>
       </form>
     </div>
   )
