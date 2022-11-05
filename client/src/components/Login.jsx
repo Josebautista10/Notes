@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { CgNotes } from 'react-icons/cg'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 import axios from 'axios'
 
@@ -10,9 +10,16 @@ const Login = () => {
     password: undefined
   })
 
-  const { loading, error, dispatch } = useContext(AuthContext)
-
+  
+  
+  const { loading, error, dispatch,user } = useContext(AuthContext)
+  
   const navigate = useNavigate()
+  
+  if (user) {
+    return <Navigate to={'/home'} replace />;
+  }
+
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }))
@@ -105,14 +112,15 @@ const Login = () => {
                 required
               />
             </div>
-          </form>
           <button
-            className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12'
+            className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12 w-full'
             disabled={loading}
             onClick={handleClick}
+            type='submit'
           >
             Login
           </button>
+          </form>
           {error && <span>{error.message}</span>}
         </div>
       </div>

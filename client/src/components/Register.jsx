@@ -4,9 +4,7 @@ import { CgNotes } from 'react-icons/cg'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 
-
 const Register = () => {
-
   const [credentials, setCredentials] = useState({
     username: undefined,
     email: undefined,
@@ -24,12 +22,12 @@ const Register = () => {
   const handleClick = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post('/auth/register', credentials)
+      await axios.post('/auth/register', credentials)
       navigate('/login')
     } catch (err) {
-      console.log(err.response.data.message);
+      console.log(err.response.data.message)
       dispatch({ type: 'REGISTER_FAILURE', payload: err.response.data })
-      console.log(error);
+      console.log(error)
     }
   }
 
@@ -134,11 +132,15 @@ const Register = () => {
                 required
               />
             </div>
+            <button
+              className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12 w-full'
+              disabled={loading}
+              onClick={handleClick}
+              type='submit'
+            >
+              Register
+            </button>
           </form>
-          <button className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12' disabled={loading}
-            onClick={handleClick}>
-            Register
-          </button>
           {error && <span>{error.message}</span>}
         </div>
       </div>

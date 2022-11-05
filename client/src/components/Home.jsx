@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { useState, useContext, useEffect } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import ReactDOM from 'react-dom'
 import Modal from 'react-modal'
 import { AuthContext } from '../context/AuthContext'
 import useFetch from '../hooks/useFetch'
@@ -31,9 +30,6 @@ const Home = () => {
 
   const { data, loading, error, reFetch } = useFetch(user ? `/notes/${user._id}` : '')
 
-  if (!user) {
-    return <Navigate to='/' replace />
-  }
 
   // let subtitle;
 
@@ -69,7 +65,7 @@ const Home = () => {
       <nav className='bg-burnt-orange flex justify-between text-peach'>
         <div className='ml-4 text-4xl py-1'>Note</div>
         <div className='mr-4 text-2xl flex items-center justify-evenly w-1/4'>
-          <p>Welcome back {user?.username}</p>
+          <p>Welcome back {user.username}</p>
           <button onClick={handleClick}>Logout</button>
         </div>
       </nav>

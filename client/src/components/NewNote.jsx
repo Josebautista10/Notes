@@ -42,6 +42,7 @@ const NewNote = ({ closeModal, id, reFetch }) => {
           min='10'
           id='description'
           onChange={handleChange}
+          placeholder='Today I had an amazing day at the park'
           required
           className='px-3
                 py-4
@@ -57,7 +58,7 @@ const NewNote = ({ closeModal, id, reFetch }) => {
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
                 w-full
                 '
-        >Today I had an amazing day at the park</textarea>
+        ></textarea>
         <p>{maxCharCount - count}</p>
         <button onClick={handleClick} disabled={count < minCharCount }>save</button>
       </form>
