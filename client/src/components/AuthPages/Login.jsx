@@ -1,33 +1,36 @@
-import axios from 'axios'
 import { useContext, useState } from 'react'
 import { CgNotes } from 'react-icons/cg'
-import { useNavigate } from 'react-router-dom'
-import { AuthContext } from '../context/AuthContext'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../context/AuthContext'
+import axios from 'axios'
 
-const Register = () => {
+const Login = () => {
   const [credentials, setCredentials] = useState({
     username: undefined,
-    email: undefined,
     password: undefined
   })
-  const { loading, error, dispatch } = useContext(AuthContext)
+
+  const { loading, error, dispatch, user } = useContext(AuthContext)
 
   const navigate = useNavigate()
 
+  if (user) {
+    return <Navigate to={'/home'} replace />
+  }
+
   const handleChange = (e) => {
-    console.log(e.target.id, e.target.value)
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }))
   }
 
   const handleClick = async (e) => {
     e.preventDefault()
+    dispatch({ type: 'LOGIN_START' })
     try {
-      await axios.post('/auth/register', credentials)
-      navigate('/login')
+      const res = await axios.post('/auth/login', credentials)
+      dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.details })
+      navigate('/home')
     } catch (err) {
-      console.log(err.response.data.message)
-      dispatch({ type: 'REGISTER_FAILURE', payload: err.response.data })
-      console.log(error)
+      dispatch({ type: 'LOGIN_FAILURE', payload: err.response.data })
     }
   }
 
@@ -46,11 +49,11 @@ const Register = () => {
       </div>
       <div className='bg-peach w-1/2 h-full flex justify-center items-center'>
         <div className='w-3/4 h-4/5 flex flex-col '>
-          <h1 className='text-burnt-orange text-3xl'>Welcome to Notes! </h1>
+          <h1 className='text-burnt-orange text-3xl'>Welcome Back!</h1>
           <p className='text-xl flex '>
-            Already have an account?&nbsp;
-            <a className='text-burnt-orange' href='/'>
-              Login!
+            Don't have an account yet?&nbsp;
+            <a className='text-burnt-orange' href='/register'>
+              Register Here!
             </a>
           </p>
           <form className=' mt-10'>
@@ -58,51 +61,25 @@ const Register = () => {
               <label>Username:</label>
               <input
                 type='text'
+                className='
+                form-control
+                block
+                w-full
+                px-3
+                py-1.5
+                text-base
+                font-normal
+                text-gray-700
+                bg-white bg-clip-padding
+                border border-solid border-gray-300
+                rounded
+                transition
+                ease-in-out
+                mb-8
+                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
                 id='username'
-                className='
-                form-control
-                block
-                w-full
-                px-3
-                py-1.5
-                text-base
-                font-normal
-                text-gray-700
-                bg-white bg-clip-padding
-                border border-solid border-gray-300
-                rounded
-                transition
-                ease-in-out
-                mb-8
-                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
-                placeholder='User300'
                 onChange={handleChange}
-                required
-              />
-            </div>
-            <div className='flex flex-col text-burnt-orange text-2xl'>
-              <label>Email:</label>
-              <input
-                type='email'
-                id='email'
-                className='
-                form-control
-                block
-                w-full
-                px-3
-                py-1.5
-                text-base
-                font-normal
-                text-gray-700
-                bg-white bg-clip-padding
-                border border-solid border-gray-300
-                rounded
-                transition
-                ease-in-out
-                mb-8
-                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
-                placeholder='example@example.com'
-                onChange={handleChange}
+                placeholder='user3000'
                 required
               />
             </div>
@@ -110,7 +87,6 @@ const Register = () => {
               <label>Password:</label>
               <input
                 type='password'
-                id='password'
                 className='
                 form-control
                 block
@@ -128,6 +104,7 @@ const Register = () => {
                 m-0
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
                 placeholder='Password'
+                id='password'
                 onChange={handleChange}
                 required
               />
@@ -138,7 +115,7 @@ const Register = () => {
               onClick={handleClick}
               type='submit'
             >
-              Register
+              Login
             </button>
           </form>
           {error && <span>{error.message}</span>}
@@ -148,4 +125,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Login

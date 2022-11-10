@@ -2,10 +2,13 @@ import axios from 'axios'
 import { useState, useContext, useEffect } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
+import { BsFillPencilFill } from 'react-icons/bs'
+import { AiFillDelete } from 'react-icons/ai'
 import { AuthContext } from '../context/AuthContext'
 import useFetch from '../hooks/useFetch'
 import getDate from '../utils/getDate'
-import NewNote from './NewNote'
+import NewNote from './Notes/NewNote'
+import UpdateNote from './Notes/UpdateNote'
 
 const customStyles = {
   content: {
@@ -27,38 +30,62 @@ const Home = () => {
   const { dispatch, user } = useContext(AuthContext)
   const navigate = useNavigate()
   const [modalIsOpen, setIsOpen] = useState(false)
+  const [updateNote, setUpdateNote] = useState(true)
+  const [noteId, setNoteId] = useState('')
 
-  const { data, loading, error, reFetch } = useFetch(user ? `/notes/${user._id}` : '')
+  const { data, loading, error, reFetch } = useFetch(
+    user ? `/notes/${user._id}` : ''
+  )
 
-
-  // let subtitle;
-
-  function openModal() {
+  const  openModal = async (e) => {
     setIsOpen(true)
   }
-
-  // function afterOpenModal() {
-  //   // references are now sync'd and can be accessed.
-  //   subtitle.style.color = '#f00';
-  // }
 
   function closeModal() {
     setIsOpen(false)
   }
 
-  const handleClick = async (e) => {
+  const handleClick = async () => {
     dispatch({ type: 'LOGOUT' })
     axios.get('/auth/logout').then(navigate('/'))
+  }
+  
+  const handleEdit = (e) => {
+    setNoteId(e.target.id)
+    setUpdateNote(true)
+    openModal()
+    // setUpdateNote(false)
+
   }
 
   const notes = data.data?.map((note) => {
     return (
-      <li key={note._id}>
+      <li
+        key={note._id}
+        id={note._id}
+        className='flex flex-col bg-burnt-orange w-1/5 rounded p-2 m-3 text-peach'
+      >
         <p>{getDate(note.createdAt)}</p>
         <p>{note.description}</p>
+        <div className='flex justify-end text-xl '>
+          <button
+            className='mr-2  hover:text-blue-500'
+            id='updateNote'
+            onClick={handleEdit}
+          >
+            <BsFillPencilFill />
+          </button>
+          <button
+            className='mr-2 hover:text-red-800'
+            onClick={() => setNoteId(note._id)}
+          >
+            <AiFillDelete />
+          </button>
+        </div>
       </li>
     )
   })
+  console.log(noteId)
 
   return (
     <div>
@@ -69,15 +96,21 @@ const Home = () => {
           <button onClick={handleClick}>Logout</button>
         </div>
       </nav>
-      <div className=''>
-        <div>
-          <button className='bg-burnt-orange' onClick={openModal}>
+
+      <div className='w-full flex justify-end my-5'>
+        <div className='mr-5'>
+          <button
+            className='bg-burnt-orange text-peach transition duration-300 hover:bg-peach hover:text-burnt-orange font-bold py-2 px-4 rounded-full'
+            onClick={openModal}
+            id='newNote'
+          >
             New Note
           </button>
         </div>
       </div>
+
       <div>
-        <ul>{notes}</ul>
+        {!loading && <ul className='flex flex-wrap justify-evenly'>{notes}</ul>}
       </div>
       <Modal
         isOpen={modalIsOpen}
@@ -86,7 +119,11 @@ const Home = () => {
         contentLabel='Example Modal'
         appElement={document.getElementById('app')}
       >
-        <NewNote closeModal={closeModal} id={user._id} reFetch={reFetch}/>
+        {!updateNote ? (
+          <NewNote closeModal={closeModal} id={user._id} reFetch={reFetch} />
+        ) : (
+          <UpdateNote closeModal={closeModal} id={user._id} noteId={noteId} reFetch={reFetch} />
+        )}
       </Modal>
     </div>
   )
