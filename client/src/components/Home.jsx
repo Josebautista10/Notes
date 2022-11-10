@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { useState, useContext, useEffect } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
 import { BsFillPencilFill } from 'react-icons/bs'
 import { AiFillDelete } from 'react-icons/ai'
@@ -10,7 +10,7 @@ import getDate from '../utils/getDate'
 import NewNote from './Notes/NewNote'
 import UpdateNote from './Notes/UpdateNote'
 
-const customStyles = {
+const normalStyle = {
   content: {
     top: '50%',
     left: '50%',
@@ -25,13 +25,38 @@ const customStyles = {
     borderRadius: '15px'
   }
 }
+const deleteStyle = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    backgroundColor: '#FF2400',
+    padding: '1%',
+    width: '30%',
+    height: '30%',
+    borderRadius: '15px'
+  }
+}
 
 const Home = () => {
   const { dispatch, user } = useContext(AuthContext)
   const navigate = useNavigate()
   const [modalIsOpen, setIsOpen] = useState(false)
-  const [updateNote, setUpdateNote] = useState(false)
   const [noteId, setNoteId] = useState('')
+  const [newNote, setNewNote] = useState(false)
+  const [updateNote, setUpdateNote] = useState(false)
+  const [deleteNote, setDeleteNote] = useState(false)
+
+  const modalStyles = () => {
+    if (updateNote || newNote) {
+      return normalStyle
+    }
+    return deleteStyle
+  }
+
 
   const { data, loading, error, reFetch } = useFetch(
     user ? `/notes/${user._id}` : ''
@@ -50,18 +75,28 @@ const Home = () => {
     axios.get('/auth/logout').then(navigate('/'))
   }
 
-  const handleEdit = (string, id) => {
-    console.log(string)
-    if (string === 'update') {
-      setNoteId(id)
-      setUpdateNote(true)
-      openModal()
-    } else {
-      setUpdateNote(false)
-      openModal()
-    }
+  const handleNewNote = () => {
+    setUpdateNote(false)
+    setDeleteNote(false)
+    setNewNote(true)
+    openModal(true)
   }
-  console.log(updateNote)
+
+  const handleEdit = (id) => {
+    setNoteId(id)
+    setNewNote(false)
+    setDeleteNote(false)
+    setUpdateNote(true)
+    openModal()
+  }
+
+  const handleDelete = (id) => {
+    setNewNote(false)
+    setUpdateNote(false)
+    setDeleteNote(true)
+    openModal()
+  }
+
   const notes = data.data?.map((note) => {
     return (
       <li
@@ -75,13 +110,14 @@ const Home = () => {
           <button
             className='mr-2  hover:text-blue-500'
             id='updateNote'
-            onClick={() => handleEdit('update', note._id)}
+            // onClick={() => handleEdit('update', note._id)}
+            onClick={() => handleEdit(note._id)}
           >
             <BsFillPencilFill />
           </button>
           <button
             className='mr-2 hover:text-red-800'
-            onClick={() => setNoteId(note._id)}
+            onClick={() => handleDelete(note._id)}
           >
             <AiFillDelete />
           </button>
@@ -89,7 +125,6 @@ const Home = () => {
       </li>
     )
   })
-  console.log(noteId)
 
   return (
     <div>
@@ -105,7 +140,8 @@ const Home = () => {
         <div className='mr-5'>
           <button
             className='bg-burnt-orange text-peach transition duration-300 hover:bg-peach hover:text-burnt-orange font-bold py-2 px-4 rounded-full'
-            onClick={() => handleEdit('newNote', null)}
+            // onClick={() => handleEdit('newNote', null)}
+            onClick={handleNewNote}
             id='newNote'
           >
             New Note
@@ -119,20 +155,22 @@ const Home = () => {
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        style={customStyles}
+        style={modalStyles()}
         contentLabel='Example Modal'
         appElement={document.getElementById('app')}
         // fix this!!!!!!!
         ariaHideApp={false}
       >
-        {updateNote ? (
+        {deleteNote && <p>you sure</p>}
+        {updateNote && (
           <UpdateNote
             closeModal={closeModal}
             id={user._id}
             noteId={noteId}
             reFetch={reFetch}
           />
-        ) : (
+        )}
+        {newNote && (
           <NewNote closeModal={closeModal} id={user._id} reFetch={reFetch} />
         )}
       </Modal>

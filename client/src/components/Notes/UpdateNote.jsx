@@ -1,36 +1,30 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GiCancel } from 'react-icons/gi'
 import useFetch from '../../hooks/useFetch'
 
-const NewNote = ({ closeModal, id, reFetch, noteId}) => {
-  const [credentials, setCredentials] = useState({
-    description: ''
-  })
-  const handleChange = (e) => {
-    setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }))
-  }
+const UpdateNote = ({ closeModal, id, reFetch, noteId }) => {
+  const [count, setCount] = useState(0)
+  const [description, setDescription] = useState()
+  let maxCharCount = 80
 
-  const { data } = useFetch( `/notes/${id}/${noteId}`)
+  useEffect(() => {
+    axios.get(`/notes/${id}/${noteId}`).then((response) => {
+      setDescription(response.data.description)
+      setCount(response.data.description.length)
+    })
+  }, [id, noteId])
 
-  console.log(data)
-  
   const handleClick = async (e) => {
     e.preventDefault()
     try {
-      await axios.post(`/notes/${id}`, credentials)
+      await axios.put(`/notes/${id}/${noteId}`, { description })
       reFetch()
       closeModal()
     } catch (err) {
       console.log(err)
     }
   }
-
-    let count = credentials.description.length
-    let maxCharCount = 80
-    let minCharCount = 10
-
-  
   return (
     <div className='flex flex-col w-8/10'>
       <div className='flex w-full justify-between mb-5'>
@@ -46,8 +40,8 @@ const NewNote = ({ closeModal, id, reFetch, noteId}) => {
           rows='3'
           min='10'
           id='description'
-          onChange={handleChange}
-          placeholder='hello world'
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           required
           className='px-3
                 py-4
@@ -65,9 +59,9 @@ const NewNote = ({ closeModal, id, reFetch, noteId}) => {
                 '
         ></textarea>
         <p>{maxCharCount - count}</p>
-        <button onClick={handleClick} disabled={count < minCharCount }>save</button>
+        <button onClick={handleClick}>save</button>
       </form>
     </div>
   )
 }
-export default NewNote
+export default UpdateNote
