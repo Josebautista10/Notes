@@ -30,14 +30,14 @@ const Home = () => {
   const { dispatch, user } = useContext(AuthContext)
   const navigate = useNavigate()
   const [modalIsOpen, setIsOpen] = useState(false)
-  const [updateNote, setUpdateNote] = useState(true)
+  const [updateNote, setUpdateNote] = useState(false)
   const [noteId, setNoteId] = useState('')
 
   const { data, loading, error, reFetch } = useFetch(
     user ? `/notes/${user._id}` : ''
   )
 
-  const  openModal = async (e) => {
+  const openModal = async (e) => {
     setIsOpen(true)
   }
 
@@ -49,15 +49,19 @@ const Home = () => {
     dispatch({ type: 'LOGOUT' })
     axios.get('/auth/logout').then(navigate('/'))
   }
-  
-  const handleEdit = (e) => {
-    setNoteId(e.target.id)
-    setUpdateNote(true)
-    openModal()
-    // setUpdateNote(false)
 
+  const handleEdit = (string, id) => {
+    console.log(string)
+    if (string === 'update') {
+      setNoteId(id)
+      setUpdateNote(true)
+      openModal()
+    } else {
+      setUpdateNote(false)
+      openModal()
+    }
   }
-
+  console.log(updateNote)
   const notes = data.data?.map((note) => {
     return (
       <li
@@ -71,7 +75,7 @@ const Home = () => {
           <button
             className='mr-2  hover:text-blue-500'
             id='updateNote'
-            onClick={handleEdit}
+            onClick={() => handleEdit('update', note._id)}
           >
             <BsFillPencilFill />
           </button>
@@ -101,7 +105,7 @@ const Home = () => {
         <div className='mr-5'>
           <button
             className='bg-burnt-orange text-peach transition duration-300 hover:bg-peach hover:text-burnt-orange font-bold py-2 px-4 rounded-full'
-            onClick={openModal}
+            onClick={() => handleEdit('newNote', null)}
             id='newNote'
           >
             New Note
@@ -118,11 +122,18 @@ const Home = () => {
         style={customStyles}
         contentLabel='Example Modal'
         appElement={document.getElementById('app')}
+        // fix this!!!!!!!
+        ariaHideApp={false}
       >
-        {!updateNote ? (
-          <NewNote closeModal={closeModal} id={user._id} reFetch={reFetch} />
+        {updateNote ? (
+          <UpdateNote
+            closeModal={closeModal}
+            id={user._id}
+            noteId={noteId}
+            reFetch={reFetch}
+          />
         ) : (
-          <UpdateNote closeModal={closeModal} id={user._id} noteId={noteId} reFetch={reFetch} />
+          <NewNote closeModal={closeModal} id={user._id} reFetch={reFetch} />
         )}
       </Modal>
     </div>
