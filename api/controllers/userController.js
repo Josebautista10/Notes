@@ -34,12 +34,12 @@ export const getUser = async (req, res, next) => {
   }
 }
 
-export const getUsers = async (req, res, next) => {
+export const getUsers = async (req,res,next)=>{
   try {
-    const users = await User.find(req.params.userid)
-    res.json(users)
-  } catch (error) {
-    next(error)
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    next(err);
   }
 }
 
