@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { GiCancel } from 'react-icons/gi'
-import useFetch from '../../hooks/useFetch'
+
 
 const UpdateNote = ({ closeModal, id, reFetch, noteId }) => {
   const [count, setCount] = useState(0)

@@ -9,37 +9,10 @@ import useFetch from '../hooks/useFetch'
 import getDate from '../utils/getDate'
 import NewNote from './Notes/NewNote'
 import UpdateNote from './Notes/UpdateNote'
+import { normalStyle, deleteStyle } from '../utils/styles'
+import DeleteNote from './Notes/DeleteNote'
 
-const normalStyle = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    backgroundColor: '#FCEDDA',
-    padding: '1%',
-    width: '50%',
-    height: '50%',
-    borderRadius: '15px'
-  }
-}
-const deleteStyle = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    backgroundColor: '#FF2400',
-    padding: '1%',
-    width: '30%',
-    height: '30%',
-    borderRadius: '15px'
-  }
-}
+
 
 const Home = () => {
   const { dispatch, user } = useContext(AuthContext)
@@ -56,7 +29,6 @@ const Home = () => {
     }
     return deleteStyle
   }
-
 
   const { data, loading, error, reFetch } = useFetch(
     user ? `/notes/${user._id}` : ''
@@ -91,6 +63,7 @@ const Home = () => {
   }
 
   const handleDelete = (id) => {
+    setNoteId(id)
     setNewNote(false)
     setUpdateNote(false)
     setDeleteNote(true)
@@ -110,7 +83,6 @@ const Home = () => {
           <button
             className='mr-2  hover:text-blue-500'
             id='updateNote'
-            // onClick={() => handleEdit('update', note._id)}
             onClick={() => handleEdit(note._id)}
           >
             <BsFillPencilFill />
@@ -161,7 +133,7 @@ const Home = () => {
         // fix this!!!!!!!
         ariaHideApp={false}
       >
-        {deleteNote && <p>you sure</p>}
+        {deleteNote && <DeleteNote id={user._id} noteId={noteId} reFetch={reFetch} closeModal={closeModal}/>}
         {updateNote && (
           <UpdateNote
             closeModal={closeModal}

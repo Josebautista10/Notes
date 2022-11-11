@@ -37,10 +37,10 @@ export const deleteNote = async (req, res, next) => {
     return next(createError(401, 'You are not authorized!'))
 
   try {
-    const deletedNote = await Note.findByIdAndDelete(req.params.id, {
+    await Note.findByIdAndDelete(req.params.id, {
       $set: req.body
     })
-    res.json(deletedNote)
+    res.json('note deleted')
   } catch (error) {
     next(error)
   }
