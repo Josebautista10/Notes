@@ -5,7 +5,6 @@ export const createNote = async (req, res, next) => {
   const userId = req.params.userid
 
   const noteInfo = { ...req.body, userId }
-  console.log(noteInfo)
   const newNote = new Note(noteInfo)
 
   try {

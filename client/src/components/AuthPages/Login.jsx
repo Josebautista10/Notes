@@ -22,7 +22,7 @@ const Login = () => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }))
   }
 
-  const handleClick = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     dispatch({ type: 'LOGIN_START' })
     try {
@@ -56,11 +56,13 @@ const Login = () => {
               Register Here!
             </a>
           </p>
-          <form className=' mt-10'>
+          <form className=' mt-10' onSubmit={handleSubmit}>
             <div className='flex flex-col text-burnt-orange text-2xl'>
               <label>Username:</label>
               <input
                 type='text'
+                maxLength='9'
+                minlength='4'
                 className='
                 form-control
                 block
@@ -109,14 +111,7 @@ const Login = () => {
                 required
               />
             </div>
-            <button
-              className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12 w-full'
-              disabled={loading}
-              onClick={handleClick}
-              type='submit'
-            >
-              Login
-            </button>
+            <input className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12 w-full' type="submit" value="Register!" disabled={loading}/>
           </form>
           {error && <span>{error.message}</span>}
         </div>
