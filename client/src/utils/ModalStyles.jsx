@@ -24,7 +24,7 @@ const deleteStyle = {
     transform: 'translate(-50%, -50%)',
     backgroundColor: '#FF2400',
     padding: '1%',
-    width: '30%',
+    width: '40%',
     height: '30%',
     borderRadius: '15px'
   }
