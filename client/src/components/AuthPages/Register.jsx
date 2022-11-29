@@ -19,7 +19,7 @@ const Register = () => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }))
   }
 
-  const handleClick = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     try {
       await axios.post('/auth/register', credentials)
@@ -33,7 +33,7 @@ const Register = () => {
 
   return (
     <div className='flex h-screen'>
-      <div className='bg-burnt-orange w-1/2'>
+      <div className='bg-burnt-orange lg:w-1/2 hidden lg:block'>
         <header>
           <h1 className='ml-5 mt-5 text-4xl text-peach'>Notes</h1>
         </header>
@@ -44,7 +44,7 @@ const Register = () => {
           </p>
         </div>
       </div>
-      <div className='bg-peach w-1/2 h-full flex justify-center items-center'>
+      <div className='bg-peach w-full lg:w-1/2 h-full flex justify-center items-center'>
         <div className='w-3/4 h-4/5 flex flex-col '>
           <h1 className='text-burnt-orange text-3xl'>Welcome to Notes! </h1>
           <p className='text-xl flex '>
@@ -53,10 +53,12 @@ const Register = () => {
               Login!
             </a>
           </p>
-          <form className=' mt-10'>
+          <form className=' mt-10' onSubmit={handleSubmit}>
             <div className='flex flex-col text-burnt-orange text-2xl'>
               <label>Username:</label>
               <input
+                maxLength='9'
+                minlength='4'
                 type='text'
                 id='username'
                 className='
@@ -132,14 +134,8 @@ const Register = () => {
                 required
               />
             </div>
-            <button
-              className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12 w-full'
-              disabled={loading}
-              onClick={handleClick}
-              type='submit'
-            >
-              Register
-            </button>
+            <input className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12 w-full' type="submit" value="Register!" disabled={loading}
+              />
           </form>
           {error && <span>{error.message}</span>}
         </div>

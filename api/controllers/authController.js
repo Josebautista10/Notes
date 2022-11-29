@@ -9,7 +9,6 @@ export const register = async (req, res, next) => {
     const existingUserName = await User.findOne({ username: req.body.username })
     if (existingUserEmail) return next(createError(404, 'Account with that email already exists!'))
     if (existingUserName) return next(createError(404, 'User already exists!'))
-    console.log(req.body)
     const salt = bcrypt.genSaltSync(10)
     const hash = bcrypt.hashSync(req.body.password, salt)
 
@@ -28,7 +27,6 @@ export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.body.username })
     if (!user) return next(createError(404, 'User not found!'))
-    console.log(user)
 
     const isPasswordCorrect = await bcrypt.compare(
       req.body.password,

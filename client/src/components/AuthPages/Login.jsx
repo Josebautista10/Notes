@@ -22,7 +22,7 @@ const Login = () => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }))
   }
 
-  const handleClick = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     dispatch({ type: 'LOGIN_START' })
     try {
@@ -35,8 +35,8 @@ const Login = () => {
   }
 
   return (
-    <div className='flex h-screen'>
-      <div className='bg-burnt-orange w-1/2'>
+    <div className='flex h-screen w-full'>
+      <div className='bg-burnt-orange lg:w-1/2 hidden lg:block'>
         <header>
           <h1 className='ml-5 mt-5 text-4xl text-peach'>Notes</h1>
         </header>
@@ -47,20 +47,22 @@ const Login = () => {
           </p>
         </div>
       </div>
-      <div className='bg-peach w-1/2 h-full flex justify-center items-center'>
+      <div className='bg-peach w-full lg:w-1/2 h-full flex justify-center items-center'>
         <div className='w-3/4 h-4/5 flex flex-col '>
-          <h1 className='text-burnt-orange text-3xl'>Welcome Back!</h1>
+          <h1 className='text-burnt-orange text-3xl'>Sign in to Notes!</h1>
           <p className='text-xl flex '>
             Don't have an account yet?&nbsp;
             <a className='text-burnt-orange' href='/register'>
               Register Here!
             </a>
           </p>
-          <form className=' mt-10'>
+          <form className=' mt-10' onSubmit={handleSubmit}>
             <div className='flex flex-col text-burnt-orange text-2xl'>
               <label>Username:</label>
               <input
                 type='text'
+                maxLength='9'
+                minlength='4'
                 className='
                 form-control
                 block
@@ -109,14 +111,7 @@ const Login = () => {
                 required
               />
             </div>
-            <button
-              className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12 w-full'
-              disabled={loading}
-              onClick={handleClick}
-              type='submit'
-            >
-              Login
-            </button>
+            <input className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12 w-full' type="submit" value="Register!" disabled={loading}/>
           </form>
           {error && <span>{error.message}</span>}
         </div>
