@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext'
 import useFetch from '../hooks/useFetch'
 import NewNote from './Notes/NewNote'
 import UpdateNote from './Notes/UpdateNote'
-import { normalStyle, deleteStyle } from '../utils/styles'
+import { normalStyle, deleteStyle } from '../utils/ModalStyles'
 import DeleteNote from './Notes/DeleteNote'
 import UserNotes from './Notes/UserNotes'
 
@@ -69,7 +69,7 @@ const Home = () => {
   return (
     <div>
       <nav className='bg-burnt-orange flex justify-between text-peach'>
-        <div className='ml-4 text-4xl py-1'>Note</div>
+        <div className='ml-4 text-4xl py-1'>Notes</div>
         <div className='mr-4 text-2xl flex items-center justify-evenly w-1/4'>
           <p>Welcome back {user.username}</p>
           <button onClick={handleLogout}>Logout</button>

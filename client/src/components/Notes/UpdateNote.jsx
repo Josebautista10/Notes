@@ -2,16 +2,14 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { GiCancel } from 'react-icons/gi'
 
-
 const UpdateNote = ({ closeModal, id, reFetch, noteId }) => {
-  const [count, setCount] = useState(0)
   const [description, setDescription] = useState()
   let maxCharCount = 80
+  let count = description?.length
 
   useEffect(() => {
     axios.get(`/notes/${id}/${noteId}`).then((response) => {
       setDescription(response.data.description)
-      setCount(response.data.description.length)
     })
   }, [id, noteId])
 
@@ -39,6 +37,7 @@ const UpdateNote = ({ closeModal, id, reFetch, noteId }) => {
           cols='10'
           rows='3'
           min='10'
+          maxLength="80"
           id='description'
           value={description}
           onChange={(e) => setDescription(e.target.value)}

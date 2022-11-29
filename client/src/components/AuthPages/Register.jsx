@@ -33,7 +33,7 @@ const Register = () => {
 
   return (
     <div className='flex h-screen'>
-      <div className='bg-burnt-orange w-1/2'>
+       <div className='bg-burnt-orange lg:w-1/2 hidden lg:block'>
         <header>
           <h1 className='ml-5 mt-5 text-4xl text-peach'>Notes</h1>
         </header>
@@ -44,7 +44,7 @@ const Register = () => {
           </p>
         </div>
       </div>
-      <div className='bg-peach w-1/2 h-full flex justify-center items-center'>
+      <div className='bg-peach w-full lg:w-1/2 h-full flex justify-center items-center'>
         <div className='w-3/4 h-4/5 flex flex-col '>
           <h1 className='text-burnt-orange text-3xl'>Welcome to Notes! </h1>
           <p className='text-xl flex '>
