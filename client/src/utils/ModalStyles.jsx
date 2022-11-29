@@ -9,7 +9,7 @@ const normalStyle = {
     backgroundColor: '#FCEDDA',
     padding: '1%',
     width: '50%',
-    height: '50%',
+    height: '42%',
     borderRadius: '15px'
   }
   
