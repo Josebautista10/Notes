@@ -111,7 +111,7 @@ const Login = () => {
                 required
               />
             </div>
-            <input className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12 w-full' type="submit" value="Register!" disabled={loading}/>
+            <input className='bg-burnt-orange text-peach px-4 py-2 rounded mt-12 w-full' type="submit" value="Login!" disabled={loading}/>
           </form>
           {error && <span>{error.message}</span>}
         </div>

@@ -23,7 +23,6 @@ const NewNote = ({ closeModal, id, reFetch }) => {
 
   let count = credentials.description.length
   let maxCharCount = 80
-  let minCharCount = 10
 
   return (
     <div className='flex flex-col text-burnt-orange'>
