@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { FaUserAlt } from 'react-icons/fa'
 import Modal from 'react-modal'
 import { AuthContext } from '../context/AuthContext'
 import useFetch from '../hooks/useFetch'
@@ -69,9 +70,14 @@ const Home = () => {
   return (
     <div>
       <nav className='bg-burnt-orange flex justify-between text-peach'>
-        <div className='ml-4 text-4xl py-1'>Notes</div>
+        <div className='ml-4 text-4xl py-1 flex items-center'>Notes</div>
         <div className='mr-4 text-2xl flex items-center justify-evenly w-1/4'>
-          <p>Welcome back {user.username}</p>
+          <div className='flex items-center hidden md:flex'>
+            <FaUserAlt  />
+            <p className=' font-bold flex ml-1'>
+              {user.username}{' '}
+            </p>{' '}
+          </div>
           <button onClick={handleLogout}>Logout</button>
         </div>
       </nav>
@@ -89,15 +95,15 @@ const Home = () => {
       </div>
 
       <div>
-          <ul className='flex flex-wrap justify-evenly'>
-        {!loading && (
+        <ul className='flex flex-wrap justify-evenly'>
+          {!loading && (
             <UserNotes
               notes={data.data}
               handleEdit={handleEdit}
               handleDelete={handleDelete}
             />
-        )}
-          </ul>
+          )}
+        </ul>
       </div>
       <Modal
         isOpen={modalIsOpen}
